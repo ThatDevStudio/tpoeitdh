@@ -1,0 +1,9 @@
+{
+  "prettier.configPath": "prettier.config.js",
+  "prettier.prettierPath": "./node_modules/prettier",
+
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "always"
+  },
+  "typescript.tsdk": "node_modules/typescript/lib"
+}
