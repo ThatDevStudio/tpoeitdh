@@ -17,7 +17,7 @@ dependencies = [
 ]
 
 [tool.poetry]
-packages = [{ include = "tpoeitdh_fec_service", from = "./src" }]
+packages = [{ include = "tpoeitdh", from = "./src" }]
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.9.7"
@@ -30,8 +30,10 @@ coverage = "^7.6.12"
 pytest-cov = "^6.0.0"
 pytest-sugar = "^1.0.0"
 
-[tool.black]
-line-length = 80
+[tool.ruff.format]
+# Like Black, use double quotes for strings.
+quote-style = "single"
+
 
 
 [build-system]
