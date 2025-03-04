@@ -25,7 +25,7 @@ export default function Home() {
               <div className="ml-4 flex flex-col items-start justify-start">
                 <div className="text-lg font-bold">{member.name}</div>
                 <div className="text-sm">
-                  {member.partyName} - {member.state}
+                  {member.partyName} - {member.state} ({member.district})
                 </div>
               </div>
             </div>
