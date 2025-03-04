@@ -14,5 +14,5 @@ export const cachedCongressFetch = async <T>(
     },
     path,
     params,
-  );
+  ).then((res) => res.response);
 };

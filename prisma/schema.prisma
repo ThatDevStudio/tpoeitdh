@@ -15,14 +15,12 @@ model ApiCache {
 
   requestHash    String
   requestPath    String
-  requestMethod  String
   requestQuery   Json   @db.JsonB
   requestBody    Json   @db.JsonB
   requestHeaders Json   @db.JsonB
 
   responseBody    Json @db.JsonB
   responseHeaders Json @db.JsonB
-  responseCode    Int
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

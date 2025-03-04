@@ -14,5 +14,5 @@ export const cachedFecFetch = async <T>(
     },
     path,
     params,
-  );
+  ).then((res) => res.response);
 };
