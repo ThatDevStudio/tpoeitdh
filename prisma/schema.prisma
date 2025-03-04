@@ -32,7 +32,7 @@ model ApiCollectionCache {
   collectionHash    String
   collectionSource  String
   collectionName    String
-  collectionOptions String
+  collectionOptions Json   @db.JsonB
   collectionBody    Json   @db.JsonB
 
   createdAt DateTime @default(now())

@@ -2,6 +2,30 @@ import { env } from "@/env";
 import { cachedFetch } from "@/server/services";
 import { type CongressResponse } from "@/server/services/congress/types";
 
+export const cachedCongressCollectionFetch = async <
+  T,
+  K extends Record<string, T[]>,
+>(
+  path: string,
+  key: string,
+  params: Record<string, string | string[]> = {},
+): Promise<T[]> => {
+  const items: T[] = [];
+
+  while (true) {
+    const response = await cachedCongressFetch<K>(path, {
+      format: "json",
+      offset: items.length.toString(),
+      limit: "250",
+      ...params,
+    });
+    items.push(...(response[key] ?? []));
+
+    if (response.pagination.count == items.length) break;
+  }
+  return items;
+};
+
 export const cachedCongressFetch = async <T>(
   path: string,
   params: Record<string, string | string[]> = {},
