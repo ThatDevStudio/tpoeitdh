@@ -10,6 +10,8 @@ export const cachedFecFetch = async <T>(
     env.FEC_API_VERSION,
     {
       accept: "application/json",
+    },
+    {
       "x-api-key": env.GOV_API_KEY,
     },
     path,

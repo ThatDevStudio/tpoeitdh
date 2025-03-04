@@ -18,6 +18,7 @@ export const cachedFetch = async <T>(
   host: string,
   version: string,
   headers: Record<string, string>,
+  nonCachedHeaders: Record<string, string>,
   path: string,
   params: Record<string, string | string[]>,
 ): Promise<CachedResponse<T>> => {
@@ -55,7 +56,7 @@ export const cachedFetch = async <T>(
   ) {
     try {
       const response = await fetch(url, {
-        headers: headers,
+        headers: { ...headers, ...nonCachedHeaders },
       });
 
       if (!response.ok) {
