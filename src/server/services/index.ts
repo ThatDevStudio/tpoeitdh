@@ -6,6 +6,7 @@ const SIX_HOURS_IN_MS = 6 * 60 * 60 * 1000;
 
 export interface CachedResponse<T> {
   response: T;
+  headers: Record<string, string>;
   cacheId: string;
   requestHash: string;
   createdAt: number;
@@ -15,14 +16,12 @@ export interface CachedResponse<T> {
 }
 
 export const cachedFetch = async <T>(
-  host: string,
-  version: string,
-  headers: Record<string, string>,
-  nonCachedHeaders: Record<string, string>,
-  path: string,
-  params: Record<string, string | string[]>,
+  endpoint: string,
+  params: Record<string, string | string[]> = {},
+  headers: Record<string, string> = {},
+  nonCachedHeaders: Record<string, string> = {},
 ): Promise<CachedResponse<T>> => {
-  const url = new URL(`${host}/${version}/${path}`);
+  const url = new URL(endpoint);
 
   const searchParams = new URLSearchParams({});
   Object.entries(params).forEach(([key, value]) => {
@@ -61,14 +60,12 @@ export const cachedFetch = async <T>(
 
       if (!response.ok) {
         console.log(await response.text(), url);
-        throw new Error(`Failed to fetch ${path}`);
+        throw new Error(`Failed to fetch ${endpoint}`);
       }
 
       const cacheResponseBody = (await response.json()) as T;
       cacheResponse = await db.apiCache.create({
         data: {
-          host: host,
-          version: version,
           requestHash: cacheRequestHash,
           requestPath: cacheRequestPath,
           requestQuery: Object.fromEntries(searchParams.entries()),
@@ -80,15 +77,22 @@ export const cachedFetch = async <T>(
       });
       refetched = true;
     } catch (error) {
-      console.error(`Error fetching ${path}`, error);
+      console.error(`Error fetching ${endpoint}`, error);
       throw error;
     }
   }
 
-  console.log("Fetching request", refetched, cacheRequestPath); // TODO: remove
+  console.log(
+    "Fetching request",
+    refetched,
+    cacheRequestPath,
+    // cacheResponse.responseBody,
+    // cacheResponse.responseHeaders,
+  ); // TODO: remove
 
   return {
     response: cacheResponse.responseBody as T,
+    headers: cacheResponse.responseHeaders as Record<string, string>,
     cacheId: cacheResponse.id,
     requestHash: cacheRequestHash,
     createdAt: cacheResponse.createdAt.getTime(),

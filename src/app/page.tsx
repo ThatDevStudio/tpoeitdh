@@ -17,7 +17,7 @@ export default function Home() {
 
       {data && (
         <div>
-          {data.members.map((member) => (
+          {data.map((member) => (
             <div
               key={member.bioguideId}
               className="flex flex-row items-center justify-start p-4"

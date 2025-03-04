@@ -10,9 +10,6 @@ datasource db {
 model ApiCache {
   id String @id @default(cuid())
 
-  host    String
-  version String
-
   requestHash    String
   requestPath    String
   requestQuery   Json   @db.JsonB
