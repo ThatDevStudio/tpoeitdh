@@ -21,6 +21,23 @@ model ApiCache {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  expiresAt DateTime @default(now())
 
   @@index([requestHash], type: Hash)
+}
+
+model ApiCollectionCache {
+  id String @id @default(cuid())
+
+  collectionHash    String
+  collectionSource  String
+  collectionName    String
+  collectionOptions String
+  collectionBody    Json   @db.JsonB
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  expiresAt DateTime @default(now())
+
+  @@index([collectionHash], type: Hash)
 }
