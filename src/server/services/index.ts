@@ -49,10 +49,7 @@ export const cachedFetch = async <T>(
     where: { requestHash: cacheRequestHash },
   });
 
-  if (
-    !cacheResponse ||
-    cacheResponse.createdAt.getTime() + SIX_HOURS_IN_MS < Date.now()
-  ) {
+  if (!cacheResponse || cacheResponse.expiresAt.getTime() < Date.now()) {
     try {
       const response = await fetch(url, {
         headers: { ...headers, ...nonCachedHeaders },
@@ -73,6 +70,7 @@ export const cachedFetch = async <T>(
           requestHeaders: headers,
           responseBody: cacheResponseBody as InputJsonObject,
           responseHeaders: Object.fromEntries(response.headers.entries()),
+          expiresAt: new Date(Date.now() + SIX_HOURS_IN_MS),
         },
       });
       refetched = true;
@@ -97,7 +95,7 @@ export const cachedFetch = async <T>(
     requestHash: cacheRequestHash,
     createdAt: cacheResponse.createdAt.getTime(),
     updatedAt: cacheResponse.updatedAt.getTime(),
-    expiresAt: cacheResponse.createdAt.getTime() + SIX_HOURS_IN_MS,
+    expiresAt: cacheResponse.expiresAt.getTime(),
     refetched: refetched,
   };
 };
